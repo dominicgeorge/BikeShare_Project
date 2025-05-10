@@ -13,8 +13,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Read VERSION file and set as environment variable
-        run: |
-            echo "VERSION=$(cat bikeshare_model/VERSION)" >> $GITHUB_ENV      
+         run: |
+            echo "VERSION=$(cat bikeshare_model/VERSION)" >> $GITHUB_ENV
+      - name: Print the version (for debug/test)
+        run: echo "The version is $VERSION"            
       - name: Set up Python 3.10
         uses: actions/setup-python@v3
         with:
@@ -95,12 +97,12 @@ jobs:
       - name: Build the Docker image for Fastapi app
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-        run: docker build . -f Dockerfile -t $DOCKER_USER/bikeshare-fastapi:$VERSION
+        run: docker build . -f Dockerfile -t $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
 
       - name: Push the Docker Image
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-        run: docker push $DOCKER_USER/bikeshare-fastapi:$VERSION
+        run: docker push $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
 
       - name: Logout to Docker hub
         run: docker logout
