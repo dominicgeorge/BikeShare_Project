@@ -81,7 +81,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Read VERSION file and set as environment variable
+        run: |
+          echo "VERSION=$(cat bikeshare_model/VERSION)" >> $GITHUB_ENV
+      - name: Print the version (for debug/test)
+        run: echo "The version is $VERSION"
 
       - uses: actions/download-artifact@v4
         with:
@@ -97,9 +103,7 @@ jobs:
       - name: Build the Docker image for Fastapi app
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-        run: |
-          VERSION=$(cat bikeshare_model/VERSION)
-          docker build . -f Dockerfile -t $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
+        run: docker build . -f Dockerfile -t $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
 
       - name: Push the Docker Image
         env:
