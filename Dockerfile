@@ -2,7 +2,7 @@
 FROM python:3.10-slim
 
 # copy application files
-ADD ..
+ADD /bike_sharing_api /bike_sharing_api/
 
 # specify working directory
 WORKDIR /bike_sharing_api
