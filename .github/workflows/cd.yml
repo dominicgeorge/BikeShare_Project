@@ -12,12 +12,16 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - name: Read VERSION file and set as environment variable
+        run: |
+          echo "VERSION=$(cat bikeshare_model/VERSION)" >> $GITHUB_ENV
+      - name: Print the version (for debug/test)
+        run: echo "The version is $VERSION"
+
       - name: Pull Docker Image
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
-        run: |
-          VERSION=$(cat bikeshare_model/VERSION)
-          sudo docker pull $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
+        run: sudo docker pull $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
 
       - name: Delete Old Docker Container
         run: sudo docker rm -f bikeshare-fastapi-container || true
