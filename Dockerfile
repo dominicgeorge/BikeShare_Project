@@ -1,11 +1,11 @@
 # pull python base image
 FROM python:3.10-slim
 
-# copy application files
-ADD /bike_sharing_api /bike_sharing_api/
-
 # specify working directory
 WORKDIR /bike_sharing_api
+
+# copy application files into the container
+COPY bike_sharing_api/ .
 
 # update pip
 RUN pip install --upgrade pip
@@ -17,4 +17,4 @@ RUN pip install -r requirements.txt
 EXPOSE 8001
 
 # start fastapi application
-CMD ["python", "app/main.py"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8001"]
