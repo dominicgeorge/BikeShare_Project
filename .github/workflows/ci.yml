@@ -97,6 +97,7 @@ jobs:
       - name: Build the Docker image for Fastapi app
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
+        run: VERSION=$(cat bikeshare_model/VERSION)  
         run: docker build . -f Dockerfile -t $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
 
       - name: Push the Docker Image

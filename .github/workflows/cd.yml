@@ -15,6 +15,7 @@ jobs:
       - name: Pull Docker Image
         env:
           DOCKER_USER: ${{ secrets.DOCKER_USER_NAME }}
+        run: VERSION=$(cat bikeshare_model/VERSION)    
         run: sudo docker pull $DOCKER_USER/bikeshare-fastapi:${VERSION:-latest}
 
       - name: Delete Old Docker Container
